@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Github } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import TiltedCard from "./TiltedCard";
-import { motion } from "framer-motion";
+
 /* LOCAL IMAGES */
 import img03 from "../assests/alukasjewellery.jpg";
 import classPep from "../assests/Screenshot 2025-12-30 232653.png";
@@ -10,7 +11,7 @@ import portrait from "../assests/Screenshot 2025-12-30 234801.png";
 import sk from "../assests/Screenshot 2025-12-30 233723.png";
 import por from "../assests/Screenshot 2025-12-30 234939.png";
 
-/* 🔥 SHARED GRADIENT */
+/* 🔥 ACTIVE GRADIENT */
 const activeGradient = "from-indigo-600 via-purple-500 to-indigo-600";
 
 /* PROJECT DATA */
@@ -19,7 +20,8 @@ const projects = [
     title: "JosAlukkas Clone",
     image: img03,
     github: "https://github.com/Shankareshwaran28/JosAlukkas_Clone",
-    description: "Web-based platform that allows users to search, book, and manage car rentals.",
+    description:
+      "Web-based platform that allows users to search, book, and manage car rentals.",
     tags: ["html", "scss", "javascript"],
     category: "frontend",
   },
@@ -27,7 +29,8 @@ const projects = [
     title: "Titan Watch Clone",
     image: logo,
     github: "https://github.com/Shankareshwaran28/Titan_clone",
-    description: "A responsive frontend clone of the Titan watch website built using HTML, CSS, and JavaScript, featuring a clean layout, modern UI, and smooth interactions.",
+    description:
+      "A responsive frontend clone of the Titan watch website built using HTML, CSS, and JavaScript.",
     tags: ["html", "scss", "javascript"],
     category: "frontend",
   },
@@ -35,39 +38,41 @@ const projects = [
     title: "Coffee Shop Clone",
     image: portrait,
     github: "https://github.com/Shankareshwaran28/Coffe-Shop-Website",
-    description: "A responsive coffee shop website built using HTML, CSS, and JavaScript, featuring a modern UI, smooth animations, and an engaging user experience.",
-    tags: ["html", "javascript", "css"],
+    description:
+      "A responsive coffee shop website with modern UI and smooth interactions.",
+    tags: ["html", "css", "javascript"],
     category: "frontend",
   },
   {
     title: "Personal Portfolio Website",
     image: por,
     github: "https://github.com/yourusername/trip-guide",
-    description: "An AI-powered image generation feature integrated into my personal portfolio using HTML, TailwindCSS, JavaScript and React to showcase interactive and creative web experiences.",
-    tags: ["html", "javascript", "Tailwind CSS", "react"],
+    description:
+      "A personal portfolio showcasing creative UI, animations, and modern web experiences.",
+    tags: ["html", "tailwind", "javascript", "react"],
     category: "frontend",
   },
   {
     title: "Nestasia Website Clone",
     image: classPep,
     github: "https://github.com/Shankareshwaran28/Nestasia_clone/tree/master",
-    description: "A Nestasia e-commerce clone with JWT-based authentication, user authorization, product catalog, and MySQL-powered backend.",
-    tags: ["html", "Tailwind CSS", "javascript", "mysql", "Php"],
+    description:
+      "E-commerce clone with authentication, product management, and MySQL backend.",
+    tags: ["html", "tailwind", "javascript", "mysql", "php"],
     category: "full-stack",
   },
   {
     title: "SilverStore Clone",
     image: sk,
     github: "https://github.com/Shankareshwaran28/Silverstore_clone/tree/master",
-    description: "A SilverStore e-commerce clone with JWT-based authentication, user authorization, product catalog, and MySQL-powered backend.",
-    tags: ["html", "Tailwind CSS", "javascript", "mysql", "Php"],
+    description:
+      "Full-stack e-commerce website with JWT authentication and admin features.",
+    tags: ["html", "tailwind", "javascript", "mysql", "php"],
     category: "full-stack",
   },
 ];
 
 const filters = ["all", "frontend", "full-stack"];
-
-
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -77,7 +82,7 @@ const Projects = () => {
       ? projects
       : projects.filter((p) => p.category === activeFilter);
 
-  // Motion variants
+  /* ANIMATION VARIANTS */
   const containerVariants = {
     hidden: {},
     show: {
@@ -87,7 +92,12 @@ const Projects = () => {
 
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+    exit: { opacity: 0, y: 30 },
   };
 
   return (
@@ -97,26 +107,27 @@ const Projects = () => {
         {/* HEADER */}
         <div className="text-center mb-12">
           <motion.h2
-            className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-3"
+            className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-3"
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
           >
             Projects
           </motion.h2>
+
           <motion.p
             className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-sm"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
           >
             Frontend & Full Stack projects built with real-world use cases.
           </motion.p>
         </div>
 
-        {/* FILTER BUTTONS */}
+        {/* FILTER PANEL */}
         <div className="flex justify-center mb-14">
           <div className="flex gap-2 p-2 rounded-full bg-gray-100 border border-gray-200 dark:bg-black/40 dark:border-white/10">
             {filters.map((filter) => (
@@ -124,59 +135,75 @@ const Projects = () => {
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300
-                  ${
-                    activeFilter === filter
-                      ? `bg-gradient-to-r ${activeGradient} text-white scale-105 shadow-lg`
-                      : `text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`
-                  }`}
+                ${
+                  activeFilter === filter
+                    ? `bg-gradient-to-r ${activeGradient} text-white scale-105 shadow-lg`
+                    : `text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`
+                }`}
               >
-                {filter === "full-stack" ? "Full Stack" : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                {filter === "full-stack"
+                  ? "Full Stack"
+                  : filter.charAt(0).toUpperCase() + filter.slice(1)}
               </button>
             ))}
           </div>
         </div>
 
         {/* PROJECT GRID */}
-        <motion.div
-          className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-        >
-          {filteredProjects.map((project, index) => (
-            <motion.div key={index} variants={cardVariants}>
-              <TiltedCard imageSrc={project.image}>
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute top-3 right-3 p-2 rounded-full bg-black/70 hover:bg-indigo-600 transition"
-                >
-                  <Github size={16} className="text-white" />
-                </a>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeFilter}
+            className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            exit="hidden"
+          >
+            {filteredProjects.map((project) => (
+              <motion.div
+                key={project.title}
+                variants={cardVariants}
+                initial="hidden"
+                animate="show"
+                exit="exit"
+              >
+                <TiltedCard imageSrc={project.image}>
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute top-3 right-3 p-2 rounded-full bg-black/70 hover:bg-indigo-600 transition"
+                  >
+                    <Github size={16} className="text-white" />
+                  </a>
 
-                <div className="mt-4">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                    {project.title}
-                  </h3>
+                  {/* 🔥 CARD TEXT (ALWAYS WHITE) */}
+                  <div className="mt-4">
+                    <h3 className="text-lg font-bold text-white">
+                      {project.title}
+                    </h3>
 
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
-                    {project.description}
-                  </p>
+                    <p className="text-gray-300 text-sm mt-2">
+                      {project.description}
+                    </p>
 
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {project.tags.map((tag, i) => (
-                      <span key={i} className="text-xs font-medium text-indigo-500">
-                        #{tag}
-                      </span>
-                    ))}
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {project.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="text-xs font-medium text-indigo-300"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </TiltedCard>
-            </motion.div>
-          ))}
-        </motion.div>
+                </TiltedCard>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
       </div>
     </section>
   );
