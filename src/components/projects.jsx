@@ -10,6 +10,7 @@ import logo from "../assests/titan.jpg";
 import portrait from "../assests/Screenshot 2025-12-30 234801.png";
 import sk from "../assests/Screenshot 2025-12-30 233723.png";
 import por from "../assests/Screenshot 2025-12-30 234939.png";
+import admin from "../assests/employee-working-in-admin-panel-illustration-svg-download-png-8293838.webp";
 
 /* 🔥 ACTIVE GRADIENT */
 const activeGradient = "from-indigo-600 via-purple-500 to-indigo-600";
@@ -68,6 +69,15 @@ const projects = [
     description:
       "Full-stack e-commerce website with JWT authentication and admin features.",
     tags: ["html", "tailwind", "javascript", "mysql", "php"],
+    category: "full-stack",
+  },
+  {
+    title: "Admin pannel MERTN Stack",
+    image: admin,
+    github: "https://github.com/Shankareshwaran28/MERN-Stack_AdminPannel/tree/master",
+    description:
+      "Full-stack e-commerce website with JWT authentication and admin features.",
+    tags: ["html", "tailwind", "react", "node.js", "express", "mongodb"],
     category: "full-stack",
   },
 ];

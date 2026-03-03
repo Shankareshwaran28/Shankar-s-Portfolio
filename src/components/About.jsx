@@ -4,9 +4,9 @@ import { motion, useAnimation, useInView } from "framer-motion";
 import Tilt from "react-parallax-tilt";
 
 import heroImg from "../assests/portrait-programmer-working-with-pc.png";
-import resumePDF from "../assests/Shankar_Resume.pdf";
+import resumePDF from "../assests/Shankar_Resume MERN stack.pdf";
 
-const roles = ["Frontend Developer", "Full Stack Developer"];
+const roles = ["Frontend Developer", "MERN Stack Developer"];
 
 /* FRAMER VARIANTS */
 const container = {

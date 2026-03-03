@@ -19,7 +19,10 @@ const skillsData = [
   {
     title: "Backend",
     skills: [
+      { name: "Node.js", icon: <FaJs className="text-green-500" /> },
+      { name: "Express.js", icon: <FaJs className="text-green-500" /> },
       { name: "PHP", icon: <FaPhp className="text-indigo-500" /> },
+      { name: "MongoDB", icon: <FaDatabase className="text-green-500" /> },
       { name: "MySQL", icon: <FaDatabase className="text-blue-500" /> },
     ],
   },

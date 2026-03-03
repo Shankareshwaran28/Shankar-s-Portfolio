@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
+import emailjs from "@emailjs/browser";
 
 // 👉 IMAGES
 import contactImg from "../assests/new-message-concept-landing-page.png";
@@ -26,6 +27,8 @@ const formItem = {
 /* ================================================= */
 
 const Contact = () => {
+  const formRef = useRef();
+
   const whatsappLink =
     "https://wa.me/919003769309?text=Hi%20I%20would%20like%20to%20contact%20you";
 
@@ -33,20 +36,42 @@ const Contact = () => {
   const [name, setName] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-
-  const recipient = "shankareshwaran28@gmail.com";
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const mailSubject = subject || `Message from ${name || email}`;
-    const mailBody = `Name: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0AMessage:%0D%0A${message}`;
+    const templateParams = {
+      name: name,
+      email: email,
+      subject: subject,
+      message: message,
+    };
 
-    const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(
-      mailSubject
-    )}&body=${encodeURIComponent(mailBody)}`;
+    emailjs
+      .send(
+        "service_xxxxxx",     // 🔹 Replace
+        "template_xxxxxx",    // 🔹 Replace
+        templateParams,
+        "your_public_key"     // 🔹 Replace
+      )
+      .then(
+        () => {
+          setLoading(false);
+          alert("Email sent successfully ✅");
 
-    window.location.href = mailtoLink;
+          setName("");
+          setEmail("");
+          setSubject("");
+          setMessage("");
+        },
+        (error) => {
+          setLoading(false);
+          console.log(error);
+          alert("Failed to send email ❌");
+        }
+      );
   };
 
   return (
@@ -69,10 +94,9 @@ const Contact = () => {
         {/* GRID */}
         <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-          {/* LEFT — IMAGE (INCREASED SIZE) */}
+          {/* LEFT IMAGE */}
           <motion.div
             className="hidden lg:flex justify-center"
-            style={{ perspective: 1200 }}
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
@@ -81,69 +105,39 @@ const Contact = () => {
             <motion.img
               src={contactImg}
               alt="Contact Illustration"
-              className="
-                w-[520px]
-                max-w-full
-                rounded-2xl
-                drop-shadow-2xl
-                transition-transform duration-300 ease-out
-                select-none
-              "
-              onPointerMove={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                const rotateY = ((x / rect.width) - 0.5) * 14;
-                const rotateX = ((y / rect.height) - 0.5) * -14;
-
-                e.currentTarget.style.transform = `
-                  rotateX(${rotateX}deg)
-                  rotateY(${rotateY}deg)
-                  scale(1.04)
-                `;
-              }}
-              onPointerLeave={(e) => {
-                e.currentTarget.style.transform =
-                  "rotateX(0deg) rotateY(0deg) scale(1)";
-              }}
+              className="w-[520px] max-w-full rounded-2xl drop-shadow-2xl"
             />
           </motion.div>
 
-          {/* RIGHT — FORM */}
+          {/* RIGHT FORM */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="
-              mx-auto w-full lg:max-w-xl
-              relative
+            className="mx-auto w-full lg:max-w-xl relative
               bg-white dark:bg-black/40
               border border-gray-200 dark:border-white/10
-              rounded-2xl p-10
-              shadow-xl dark:shadow-none
-              backdrop-blur-md
-            "
+              rounded-2xl p-10 shadow-xl backdrop-blur-md"
           >
             <h3 className="text-gray-900 dark:text-white font-semibold mb-6">
               Email Me 🚀
             </h3>
 
-            {/* Decorative Overlay */}
             <img
               src={overlayImg}
-              alt="decorative mail"
+              alt="decorative"
               className="pointer-events-none hidden md:block absolute -top-8 -right-8 w-28 rotate-6"
             />
 
             <motion.form
+              ref={formRef}
+              onSubmit={handleSubmit}
               className="space-y-4"
               variants={formContainer}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              onSubmit={handleSubmit}
             >
               <motion.input
                 variants={formItem}
@@ -154,9 +148,7 @@ const Contact = () => {
                 required
                 className="w-full rounded-lg bg-gray-100 dark:bg-white/10
                 border border-gray-300 dark:border-gray-600
-                px-4 py-3 text-gray-900 dark:text-white
-                placeholder-gray-500 dark:placeholder-gray-400
-                focus:outline-none focus:border-indigo-500"
+                px-4 py-3 text-gray-900 dark:text-white"
               />
 
               <motion.input
@@ -165,11 +157,10 @@ const Contact = () => {
                 placeholder="Your Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
                 className="w-full rounded-lg bg-gray-100 dark:bg-white/10
                 border border-gray-300 dark:border-gray-600
-                px-4 py-3 text-gray-900 dark:text-white
-                placeholder-gray-500 dark:placeholder-gray-400
-                focus:outline-none focus:border-indigo-500"
+                px-4 py-3 text-gray-900 dark:text-white"
               />
 
               <motion.input
@@ -180,9 +171,7 @@ const Contact = () => {
                 onChange={(e) => setSubject(e.target.value)}
                 className="w-full rounded-lg bg-gray-100 dark:bg-white/10
                 border border-gray-300 dark:border-gray-600
-                px-4 py-3 text-gray-900 dark:text-white
-                placeholder-gray-500 dark:placeholder-gray-400
-                focus:outline-none focus:border-indigo-500"
+                px-4 py-3 text-gray-900 dark:text-white"
               />
 
               <motion.textarea
@@ -194,9 +183,7 @@ const Contact = () => {
                 required
                 className="w-full rounded-lg bg-gray-100 dark:bg-white/10
                 border border-gray-300 dark:border-gray-600
-                px-4 py-3 text-gray-900 dark:text-white
-                placeholder-gray-500 dark:placeholder-gray-400
-                focus:outline-none focus:border-indigo-500 resize-none"
+                px-4 py-3 text-gray-900 dark:text-white resize-none"
               />
 
               <motion.div
@@ -205,11 +192,12 @@ const Contact = () => {
               >
                 <button
                   type="submit"
+                  disabled={loading}
                   className="bg-gradient-to-r from-fuchsia-600 to-purple-600
                   text-white font-semibold py-3 rounded-lg
-                  hover:opacity-90 transition"
+                  hover:opacity-90 transition disabled:opacity-60"
                 >
-                  Send Email
+                  {loading ? "Sending..." : "Send Email"}
                 </button>
 
                 <a
